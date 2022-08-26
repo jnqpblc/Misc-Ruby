@@ -1,0 +1,36 @@
+<ruby>
+#usage examples:
+#msf> search -o mods.txt tomcat
+#msf> setg RHOSTS 10.1.1.99 10.1.1.195
+#msf> setg RPORTS 8009 8080 8190 8443
+#msf> resource msf_csv_export_autrun.rc
+
+search_output = "mods.txt"
+if File.file?(search_output)
+  grouped = CSV.table(search_output).group_by { |r| r[:name] }
+  grouped.map { |name, rows|
+    if name =~ /auxiliary/i
+      if name !~ /auxiliary\/dos\//i && name !~ /auxiliary\/server\//i && name !~ /auxiliary\/gather\//i
+        print_status("[*] Running #{name}")
+        self.run_single("use #{name}")
+        for port in framework.datastore['RPORTS'].split() do
+          self.run_single("set RPORT #{port}")
+          self.run_single("run")
+        end
+        self.run_single("back")
+      end
+    end
+    if name =~ /exploit/i
+      if name !~ /\/browser\//i && name !~ /\/fileformat\// && name !~ /\/local\//
+        print_status("[*] Running #{name}")
+        self.run_single("use #{name}")
+        for port in framework.datastore['RPORTS'].split() do
+          self.run_single("set RPORT #{port}")
+          self.run_single("check")
+        end
+        self.run_single("back")
+      end
+    end
+  }
+end
+</ruby>
