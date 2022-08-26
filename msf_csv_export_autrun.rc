@@ -21,7 +21,7 @@ if File.file?(search_output)
       end
     end
     if name =~ /exploit/i
-      if name !~ /\/browser\//i && name !~ /\/fileformat\// && name !~ /\/local\//
+      if name !~ /\/browser\//i && name !~ /\/fileformat\// && name !~ /\/local\// && name !~ /\/fuzzers\//
         print_status("[*] Running #{name}")
         self.run_single("use #{name}")
         for port in framework.datastore['RPORTS'].split() do
