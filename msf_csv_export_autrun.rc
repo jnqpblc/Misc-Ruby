@@ -8,6 +8,8 @@
 self.run_single("setg USER_FILE /usr/share/metasploit-framework/data/wordlists/unix_users.txt")
 self.run_single("setg PASS_FILE /usr/share/metasploit-framework/data/wordlists/unix_passwords.txt")
 self.run_single("setg VERBOSE false")
+self.run_single("setg USER_AS_PASS true")
+self.run_single("setg THREADS 4")
 
 search_output = "mods.txt"
 if File.file?(search_output)
