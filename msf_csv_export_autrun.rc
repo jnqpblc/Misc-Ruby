@@ -5,12 +5,16 @@
 #msf> setg RPORTS 8009 8080 8190 8443
 #msf> resource msf_csv_export_autrun.rc
 
+self.run_single("setg USER_FILE /usr/share/metasploit-framework/data/wordlists/unix_users.txt")
+self.run_single("setg PASS_FILE /usr/share/metasploit-framework/data/wordlists/unix_passwords.txt")
+self.run_single("setg VERBOSE false")
+
 search_output = "mods.txt"
 if File.file?(search_output)
   grouped = CSV.table(search_output).group_by { |r| r[:name] }
   grouped.map { |name, rows|
     if name =~ /auxiliary/i
-      if name !~ /auxiliary\/dos\//i && name !~ /auxiliary\/server\//i && name !~ /auxiliary\/gather\//i
+      if name !~ /auxiliary\/dos\//i && name !~ /auxiliary\/server\//i && name !~ /auxiliary\/gather\//i && name !~ /\/fuzzers\//i && name !~ /\/admin\/vnc\//i
         print_status("[*] Running #{name}")
         self.run_single("use #{name}")
         for port in framework.datastore['RPORTS'].split() do
