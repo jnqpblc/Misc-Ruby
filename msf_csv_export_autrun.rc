@@ -19,6 +19,9 @@ if File.file?(search_output)
         self.run_single("use #{name}")
         for port in framework.datastore['RPORTS'].split() do
           self.run_single("set RPORT #{port}")
+          self.run_single("setg SSL false")
+          self.run_single("run")
+          self.run_single("setg SSL true")
           self.run_single("run")
         end
         self.run_single("back")
@@ -30,6 +33,9 @@ if File.file?(search_output)
         self.run_single("use #{name}")
         for port in framework.datastore['RPORTS'].split() do
           self.run_single("set RPORT #{port}")
+          self.run_single("setg SSL false")
+          self.run_single("check")
+          self.run_single("setg SSL true")
           self.run_single("check")
         end
         self.run_single("back")
